@@ -18,6 +18,11 @@ const allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(',').map(url => url.trim())
   : ['http://localhost:3000'];
 
+// Add Netlify URL to allowed origins
+if (process.env.NODE_ENV === 'production') {
+  allowedOrigins.push('https://incubyte-sweetshop.netlify.app');
+}
+
 app.use(cors({
   origin: (origin, callback) => {
     // Allow requests with no origin (like mobile apps, curl, Postman)
@@ -27,6 +32,9 @@ app.use(cors({
     if (allowedOrigins.includes(origin) || process.env.NODE_ENV !== 'production') {
       callback(null, true);
     } else {
+      // Log for debugging
+      console.log('CORS blocked origin:', origin);
+      console.log('Allowed origins:', allowedOrigins);
       callback(new Error('Not allowed by CORS'));
     }
   },
@@ -46,8 +54,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/sweets', sweetsRoutes);
 app.use('/api/sweets', inventoryRoutes);
 
-// Health check
+// Health check (both with and without /api prefix for compatibility)
 app.get('/health', (req, res) => {
+  res.json({ status: 'ok', message: 'Sweet Shop API is running' });
+});
+
+app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Sweet Shop API is running' });
 });
 
