@@ -29,13 +29,13 @@ export class AuthService {
 
     // Generate token
     const token = generateToken({
-      userId: user._id.toString(),
+      userId: String(user._id),
       email: user.email,
       role: user.role,
     });
 
     // Remove password_hash from response
-    const userObj = user.toObject();
+    const userObj: any = user.toObject();
     delete userObj.password_hash;
 
     return {
@@ -59,13 +59,13 @@ export class AuthService {
 
     // Generate token
     const token = generateToken({
-      userId: user._id.toString(),
+      userId: String(user._id),
       email: user.email,
       role: user.role,
     });
 
     // Remove password_hash from response
-    const userObj = user.toObject();
+    const userObj: any = user.toObject();
     delete userObj.password_hash;
 
     return {
