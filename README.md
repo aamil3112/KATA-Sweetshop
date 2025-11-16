@@ -2,6 +2,10 @@
 
 A full-stack web application for managing a sweet shop inventory, built with Node.js/TypeScript, React, and MongoDB. This project follows Test-Driven Development (TDD) principles and demonstrates modern software development practices.
 
+## 🌐 Live Demo
+
+**🔗 [View Live Application](https://incubyte-sweetshop.netlify.app/dashboard)**
+
 ## 🎯 Project Overview
 
 The Sweet Shop Management System is a comprehensive solution that allows users to:
@@ -165,6 +169,13 @@ npm test
 - `POST /api/sweets/:id/purchase` - Purchase a sweet (decreases quantity)
 - `POST /api/sweets/:id/restock` - Restock a sweet (Admin only, increases quantity)
 
+### Orders (Protected - Requires Authentication)
+- `POST /api/orders` - Create a new order (checkout)
+- `GET /api/orders/my-orders` - Get current user's orders
+- `GET /api/orders` - Get all orders (Admin only)
+- `GET /api/orders/:id` - Get order by ID
+- `GET /api/orders/stats` - Get order statistics (Admin only)
+
 ### Authentication
 All protected endpoints require a JWT token in the Authorization header:
 ```
@@ -177,8 +188,13 @@ Authorization: Bearer <your_jwt_token>
 - User registration and login
 - Browse all available sweets
 - Search and filter sweets by name, category, and price range
+- **Shopping cart** - Add multiple items and checkout
+- **Order history** - View past orders
 - Purchase sweets (with automatic inventory management)
+- **Sort functionality** - Sort by name, price, or category
+- **Quantity selector** - Choose quantity before purchasing
 - View stock availability
+- **Toast notifications** - Real-time feedback for all actions
 
 ### Admin Features
 - All user features plus:
@@ -186,6 +202,7 @@ Authorization: Bearer <your_jwt_token>
 - Edit existing sweets
 - Delete sweets
 - Restock inventory
+- **Order statistics** - View sales analytics
 
 ## 📸 Screenshots
 
