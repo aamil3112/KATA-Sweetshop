@@ -66,9 +66,9 @@ const SweetCard: React.FC<SweetCardProps> = ({
               console.log(`Trying .webp for ${sweet.name}`);
               img.src = `${basePath}.webp`;
             } else {
-              // Final fallback to placeholder
+              // Final fallback to a working placeholder service
               console.warn(`⚠️ Using placeholder for ${sweet.name} - all image formats failed`);
-              img.src = 'https://via.placeholder.com/300x200?text=' + encodeURIComponent(sweet.name);
+              img.src = `https://placehold.co/300x200/667eea/ffffff?text=${encodeURIComponent(sweet.name)}`;
             }
           }}
           onLoad={() => {
