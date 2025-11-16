@@ -277,6 +277,17 @@ This project is created for educational purposes as part of a coding kata.
 
 ---
 
+## My AI Usage
+
+During the development of this project, I used AI coding assistants to help with:
+
+- Code suggestions and boilerplate generation
+- Debugging and error resolution
+- Documentation formatting
+- Test structure suggestions
+
+AI tools were used as development aids to enhance productivity while maintaining full code ownership and architectural control.
+
 ## 📧 Contact
 
 For questions or issues, please open an issue in the repository.
