@@ -1,9 +1,13 @@
 .search-container {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
   margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: fadeInUp 0.5s ease-out;
 }
 
 .search-form {
@@ -19,23 +23,35 @@
 }
 
 .search-field label {
-  margin-bottom: 0.5rem;
-  color: #666;
-  font-weight: 500;
+  margin-bottom: 0.625rem;
+  color: var(--text-secondary);
+  font-weight: 600;
   font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.85rem;
 }
 
 .search-field input {
-  padding: 0.75rem;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  padding: 0.875rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: 10px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  background: white;
+  font-weight: 500;
 }
 
 .search-field input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.search-field input::placeholder {
+  color: var(--text-light);
+  font-weight: 400;
 }
 
 .search-actions {
@@ -45,31 +61,44 @@
 
 .btn-search,
 .btn-reset {
-  padding: 0.75rem 1.5rem;
+  padding: 0.875rem 2rem;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-search {
-  background: #667eea;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   color: white;
 }
 
 .btn-search:hover {
-  background: #5568d3;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
+.btn-search:active {
   transform: translateY(-1px);
 }
 
 .btn-reset {
-  background: #e0e0e0;
-  color: #666;
+  background: white;
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
 }
 
 .btn-reset:hover {
-  background: #d0d0d0;
+  background: var(--border);
+  color: var(--text-primary);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
 }
 
 @media (max-width: 768px) {

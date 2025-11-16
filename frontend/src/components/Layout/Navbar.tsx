@@ -15,7 +15,7 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="navbar-container">
         <Link to="/dashboard" className="navbar-brand">
-          🍬 Sweet Shop
+          Sweet Shop
         </Link>
         <div className="navbar-menu">
           {isAuthenticated ? (
