@@ -1,10 +1,15 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useCart } from '../../context/CartContext';
+import { useState } from 'react';
+import ShoppingCart from '../Cart/ShoppingCart';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { getTotalItems } = useCart();
   const navigate = useNavigate();
+  const [showCart, setShowCart] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -20,6 +25,19 @@ const Navbar: React.FC = () => {
         <div className="navbar-menu">
           {isAuthenticated ? (
             <>
+              <button
+                onClick={() => setShowCart(!showCart)}
+                className="btn-cart"
+                title="Shopping Cart"
+              >
+                🛒
+                {getTotalItems() > 0 && (
+                  <span className="cart-badge">{getTotalItems()}</span>
+                )}
+              </button>
+              <Link to="/orders" className="navbar-link">
+                📋 Orders
+              </Link>
               <span className="navbar-user">
                 {user?.email} {user?.role === 'admin' && '(Admin)'}
               </span>
@@ -38,6 +56,7 @@ const Navbar: React.FC = () => {
             </>
           )}
         </div>
+        {showCart && <ShoppingCart onClose={() => setShowCart(false)} />}
       </div>
     </nav>
   );

@@ -5,6 +5,7 @@ import { connectDatabase } from './config/database';
 import authRoutes from './routes/authRoutes';
 import sweetsRoutes from './routes/sweetsRoutes';
 import inventoryRoutes from './routes/inventoryRoutes';
+import orderRoutes from './routes/orderRoutes';
 import { errorHandler } from './middleware/errorHandler';
 
 dotenv.config();
@@ -53,6 +54,7 @@ connectDatabase().catch((error) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/sweets', sweetsRoutes);
 app.use('/api/sweets', inventoryRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Health check (both with and without /api prefix for compatibility)
 app.get('/health', (req, res) => {

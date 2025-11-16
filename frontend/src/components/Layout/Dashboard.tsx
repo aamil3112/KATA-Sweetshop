@@ -1,19 +1,24 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useToast } from '../../context/ToastContext';
 import { sweetsAPI, Sweet } from '../../services/api';
 import SweetList from '../Sweets/SweetList';
 import SweetSearch from '../Sweets/SweetSearch';
 import SweetForm from '../Sweets/SweetForm';
 import './Dashboard.css';
 
+type SortOption = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc' | 'category-asc' | 'category-desc';
+
 const Dashboard: React.FC = () => {
   const { isAdmin } = useAuth();
+  const { showToast } = useToast();
   const [sweets, setSweets] = useState<Sweet[]>([]);
   const [filteredSweets, setFilteredSweets] = useState<Sweet[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingSweet, setEditingSweet] = useState<Sweet | null>(null);
+  const [sortBy, setSortBy] = useState<SortOption>('name-asc');
 
   useEffect(() => {
     loadSweets();
@@ -44,6 +49,8 @@ const Dashboard: React.FC = () => {
     try {
       const data = await sweetsAPI.search(searchParams);
       setFilteredSweets(data);
+      // Apply current sort after search
+      handleSort(sortBy);
     } catch (err: any) {
       setError(err.response?.data?.error || 'Search failed');
     }
@@ -53,9 +60,35 @@ const Dashboard: React.FC = () => {
     try {
       await sweetsAPI.purchase(id, quantity);
       await loadSweets();
+      showToast(`Successfully purchased ${quantity} item(s)!`, 'success');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Purchase failed');
+      const errorMsg = err.response?.data?.error || 'Purchase failed';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
     }
+  };
+
+  const handleSort = (option: SortOption) => {
+    setSortBy(option);
+    const sorted = [...filteredSweets].sort((a, b) => {
+      switch (option) {
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        case 'price-asc':
+          return a.price - b.price;
+        case 'price-desc':
+          return b.price - a.price;
+        case 'category-asc':
+          return a.category.localeCompare(b.category);
+        case 'category-desc':
+          return b.category.localeCompare(a.category);
+        default:
+          return 0;
+      }
+    });
+    setFilteredSweets(sorted);
   };
 
   const handleAdd = async (sweet: any) => {
@@ -63,8 +96,11 @@ const Dashboard: React.FC = () => {
       await sweetsAPI.create(sweet);
       setShowAddForm(false);
       await loadSweets();
+      showToast('Sweet added successfully!', 'success');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to add sweet');
+      const errorMsg = err.response?.data?.error || 'Failed to add sweet';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
     }
   };
 
@@ -73,8 +109,11 @@ const Dashboard: React.FC = () => {
       await sweetsAPI.update(id, sweet);
       setEditingSweet(null);
       await loadSweets();
+      showToast('Sweet updated successfully!', 'success');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to update sweet');
+      const errorMsg = err.response?.data?.error || 'Failed to update sweet';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
     }
   };
 
@@ -85,8 +124,11 @@ const Dashboard: React.FC = () => {
     try {
       await sweetsAPI.delete(id);
       await loadSweets();
+      showToast('Sweet deleted successfully!', 'success');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Failed to delete sweet');
+      const errorMsg = err.response?.data?.error || 'Failed to delete sweet';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
     }
   };
 
@@ -94,8 +136,11 @@ const Dashboard: React.FC = () => {
     try {
       await sweetsAPI.restock(id, quantity);
       await loadSweets();
+      showToast(`Restocked ${quantity} items!`, 'success');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Restock failed');
+      const errorMsg = err.response?.data?.error || 'Restock failed';
+      setError(errorMsg);
+      showToast(errorMsg, 'error');
     }
   };
 
@@ -132,7 +177,25 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
-      <SweetSearch onSearch={handleSearch} onReset={() => loadSweets()} />
+      <div className="dashboard-controls">
+        <SweetSearch onSearch={handleSearch} onReset={() => loadSweets()} />
+        <div className="sort-controls">
+          <label htmlFor="sort-select">Sort by:</label>
+          <select
+            id="sort-select"
+            value={sortBy}
+            onChange={(e) => handleSort(e.target.value as SortOption)}
+            className="sort-select"
+          >
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="price-asc">Price (Low to High)</option>
+            <option value="price-desc">Price (High to Low)</option>
+            <option value="category-asc">Category (A-Z)</option>
+            <option value="category-desc">Category (Z-A)</option>
+          </select>
+        </div>
+      </div>
 
       {showAddForm && (
         <SweetForm

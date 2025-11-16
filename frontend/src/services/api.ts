@@ -162,5 +162,61 @@ export const sweetsAPI = {
   },
 };
 
+export interface OrderItem {
+  sweet_id: string;
+  sweet_name: string;
+  quantity: number;
+  price: number;
+  total: number;
+}
+
+export interface Order {
+  _id: string;
+  id?: string;
+  user_id: string;
+  items: OrderItem[];
+  total_amount: number;
+  status: 'pending' | 'completed' | 'cancelled';
+  created_at: string;
+  updated_at: string;
+}
+
+export interface OrderInput {
+  items: Array<{
+    sweet_id: string;
+    quantity: number;
+  }>;
+}
+
+export interface OrderStats {
+  totalOrders: number;
+  totalRevenue: number;
+  totalItemsSold: number;
+  averageOrderValue: number;
+}
+
+export const ordersAPI = {
+  create: async (order: OrderInput): Promise<Order> => {
+    const response = await api.post('/orders', order);
+    return response.data;
+  },
+  getMyOrders: async (): Promise<Order[]> => {
+    const response = await api.get('/orders/my-orders');
+    return response.data;
+  },
+  getAll: async (): Promise<Order[]> => {
+    const response = await api.get('/orders');
+    return response.data;
+  },
+  getById: async (id: string): Promise<Order> => {
+    const response = await api.get(`/orders/${id}`);
+    return response.data;
+  },
+  getStats: async (): Promise<OrderStats> => {
+    const response = await api.get('/orders/stats');
+    return response.data;
+  },
+};
+
 export default api;
 

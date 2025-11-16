@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Sweet } from '../../services/api';
+import { useCart } from '../../context/CartContext';
+import { useToast } from '../../context/ToastContext';
 import './SweetCard.css';
 
 interface SweetCardProps {
@@ -17,8 +19,12 @@ const SweetCard: React.FC<SweetCardProps> = ({
   onDelete,
   onRestock,
 }) => {
+  const { addToCart } = useCart();
+  const { showToast } = useToast();
   const [restockQuantity, setRestockQuantity] = useState(10);
   const [showRestock, setShowRestock] = useState(false);
+  const [purchaseQuantity, setPurchaseQuantity] = useState(1);
+  const [showQuantitySelector, setShowQuantitySelector] = useState(false);
 
   // Helper function to get the correct image path
   const getImagePath = (sweetName: string): string => {
@@ -90,16 +96,78 @@ const SweetCard: React.FC<SweetCardProps> = ({
         </div>
       </div>
       <div className="sweet-actions">
-        <button
-          onClick={() => {
-            const sweetId = sweet._id || sweet.id;
-            if (sweetId) onPurchase(sweetId, 1);
-          }}
-          disabled={sweet.quantity === 0}
-          className="btn-purchase"
-        >
-          Purchase
-        </button>
+        {!showQuantitySelector ? (
+          <>
+            <button
+              onClick={() => {
+                const sweetId = sweet._id || sweet.id;
+                if (sweetId) {
+                  addToCart(sweet, 1);
+                  showToast(`${sweet.name} added to cart!`, 'success');
+                }
+              }}
+              disabled={sweet.quantity === 0}
+              className="btn-add-to-cart"
+            >
+              🛒 Add to Cart
+            </button>
+            <button
+              onClick={() => setShowQuantitySelector(true)}
+              disabled={sweet.quantity === 0}
+              className="btn-purchase"
+            >
+              Buy Now
+            </button>
+          </>
+        ) : (
+          <div className="quantity-selector">
+            <button
+              onClick={() => setPurchaseQuantity(Math.max(1, purchaseQuantity - 1))}
+              className="qty-btn"
+            >
+              −
+            </button>
+            <input
+              type="number"
+              min="1"
+              max={sweet.quantity}
+              value={purchaseQuantity}
+              onChange={(e) => {
+                const val = parseInt(e.target.value) || 1;
+                setPurchaseQuantity(Math.min(sweet.quantity, Math.max(1, val)));
+              }}
+              className="qty-input"
+            />
+            <button
+              onClick={() => setPurchaseQuantity(Math.min(sweet.quantity, purchaseQuantity + 1))}
+              className="qty-btn"
+            >
+              +
+            </button>
+            <button
+              onClick={() => {
+                const sweetId = sweet._id || sweet.id;
+                if (sweetId) {
+                  onPurchase(sweetId, purchaseQuantity);
+                  setShowQuantitySelector(false);
+                  setPurchaseQuantity(1);
+                }
+              }}
+              className="btn-confirm-purchase"
+            >
+              Confirm
+            </button>
+            <button
+              onClick={() => {
+                setShowQuantitySelector(false);
+                setPurchaseQuantity(1);
+              }}
+              className="btn-cancel-purchase"
+            >
+              Cancel
+            </button>
+          </div>
+        )}
         {onEdit && (
           <button onClick={() => onEdit(sweet)} className="btn-edit">
             Edit

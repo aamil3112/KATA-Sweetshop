@@ -227,6 +227,17 @@
   height: 300px;
 }
 
+.btn-add-to-cart {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+}
+
+.btn-add-to-cart:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+}
+
 .btn-purchase {
   background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
   color: white;
@@ -236,6 +247,78 @@
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
   background: linear-gradient(135deg, #059669 0%, var(--success) 100%);
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.qty-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.qty-btn:hover {
+  background: var(--primary-dark);
+  transform: scale(1.1);
+}
+
+.qty-input {
+  flex: 1;
+  min-width: 60px;
+  padding: 0.5rem;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.qty-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.btn-confirm-purchase {
+  background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  color: white;
+  flex: 1;
+  min-width: 80px;
+}
+
+.btn-confirm-purchase:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-cancel-purchase {
+  background: white;
+  color: var(--text-secondary);
+  border: 2px solid var(--border);
+  flex: 1;
+  min-width: 80px;
+}
+
+.btn-cancel-purchase:hover {
+  background: var(--border);
+  transform: translateY(-2px);
 }
 
 .btn-purchase:disabled {
