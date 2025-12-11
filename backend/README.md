@@ -1,6 +1,6 @@
 # Sweet Shop Backend API
 
-Backend API for the Sweet Shop Management System built with Node.js, TypeScript, Express, and PostgreSQL.
+Backend API for the Sweet Shop Management System built with Node.js, TypeScript, Express, and MongoDB.
 
 ## Setup
 
@@ -11,23 +11,15 @@ npm install
 
 2. Create a `.env` file (see `.env.example` for reference):
 ```env
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=sweet_shop
-DB_USER=postgres
-DB_PASSWORD=your_password
+MONGODB_URI=mongodb://localhost:27017/sweet_shop
 JWT_SECRET=your_secret_key
 JWT_EXPIRES_IN=24h
 PORT=3001
 NODE_ENV=development
+FRONTEND_URL=http://localhost:3000
 ```
 
-3. Run database migrations:
-```bash
-psql -U postgres -d sweet_shop -f migrations/001_initial_schema.sql
-```
-
-4. Start the server:
+3. Start the server:
 ```bash
 # Development
 npm run dev
